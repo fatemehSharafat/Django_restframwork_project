@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-class User(models.Model):
+class Login(models.Model):
     national_code = models.CharField(_('national code'),max_length=10, unique=True)
     password = models.CharField(_('password'),max_length=30)
 
@@ -18,7 +18,7 @@ class PosRegister(models.Model):
     last_name = models.CharField(_('last name'),max_length=25)
     father_name = models.CharField(_('father name'),max_length=20)
     birthday = models.CharField(_('date of birth'),max_length=15)
-    national_code = models.ForeignKey('User',verbose_name=_('national code'), on_delete=models.CASCADE, to_field='national_code')
+    national_code = models.ForeignKey('Login',verbose_name=_('national code'), on_delete=models.CASCADE, to_field='national_code')
     national_card_series = models.CharField(_('National card series'),max_length=10, blank=True)
     birthcertificate_number = models.CharField(_('birth certificate number'),max_length=10)
     birthcertificate_serial = models.CharField(_('birth certificate serial'),max_length=6)
