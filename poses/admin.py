@@ -1,11 +1,18 @@
 from django.contrib import admin
 
-from .models import PosRegister, Login
+from .models import PosRegister, User
+
+
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['id','national_code']
+    list_filter = ['national_code']
+    search_fields = ['national_code']
+
 
 @admin.register(PosRegister)
 class PosRegisterAdmin(admin.ModelAdmin):
-    list_display = ['id','first_name', 'last_name','national_code' , 'created_time', 'updated_time']
+    list_display = ['id', 'first_name', 'last_name', 'national_code', 'cerated_time', 'updated_time']
     list_filter = ['id', 'first_name', 'last_name', 'national_code']
     search_fields = ['id', 'first_name', 'last_name', 'national_code']
-
-.3.....
