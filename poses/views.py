@@ -1,33 +1,49 @@
-#from django.shortcuts import render
+# from django.shortcuts import render
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import PosRegister , User
-from .serializers import PosRegisterSerializer , UserSerializer
+from .models import PosRegister, User
+from .serializers import PosRegisterSerializer, UserSerializer
 
+
+# PosRegister
 class PosRegisterListView(APIView):
 
-    def get(self, request):
-        posregisters = PosRegister.objects.all()
+    def get(self, request, user):
+        posregisters = PosRegister.objects.filter(user=user)
         serializer = PosRegisterSerializer(posregisters, many=True, context={'request': request})
         return Response(serializer.data)
 
+
 class PosRegisterDetailView(APIView):
 
-    def get(self, request, pk):
+    def get(self, request, pk, user):
         try:
-            posregister = PosRegister.objects.get(pk=pk)
+            posregister = PosRegister.objects.get(pk=pk,user=user)
         except PosRegister.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        serializer= PosRegisterSerializer(posregister , context={'request': request})
+        serializer = PosRegisterSerializer(posregister, context={'request': request})
         return Response(serializer.data)
 
-class UserView(APIView):
+
+# User
+class UserListView(APIView):
 
     def get(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True, context={'request': request})
+        return Response(serializer.data)
+
+class UserDetailView(APIView):
+
+    def get(self, request, pk):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializer(user, context={'request': request})
         return Response(serializer.data)

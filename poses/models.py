@@ -15,8 +15,21 @@ class User(models.Model):
         return self.national_code
 
 class PosRegister(models.Model):
+    # Defining different types
+
+    """FILE_AUDIO = 1
+    FILE_VIDEO = 2
+    FILE_PDF = 3
+    FILE_TYPES = (
+        (FILE_AUDIO,_('audio')),
+        (FILE_VIDEO,_('video')),
+        (FILE_PDF,_('pdf')),
+    )
+    file_type =models.PositveSmallIntegerField(_('file type'), choices=FILE_TYPES, default=FILE_AUDIO)
+"""
+
     # parent= models.ForeignKey('self',verbose_name=_('parent'),blank=True,null=True,on_delete=models.CASCADE)
-    parent = models.ForeignKey('User',verbose_name=_('parent'),related_name='posregisters',on_delete=models.CASCADE,to_field='national_code', blank=True,null=True)
+    user = models.ForeignKey('User',verbose_name=_('parent'),related_name='posregisters',on_delete=models.CASCADE,to_field='national_code', blank=True)
     first_name = models.CharField(_('first name'), max_length=20)
     last_name = models.CharField(_('last name'), max_length=25)
     father_name = models.CharField(_('father name'), max_length=20)
@@ -89,15 +102,15 @@ class PosRegister(models.Model):
     second_bank_name = models.CharField(_('second bank name'), max_length=50, blank=True)
     second_shaba_number = models.CharField(_('second shaba number'), max_length=16, blank=True)
     paziresh = models.BooleanField(_('paziresh'), default=False)
-    businesslicense = models.FileField(_('businesslicense'), upload_to='posdocuments/%Y/%m/%d/')
-    leaseterm = models.FileField(_('leaseterm'), upload_to='posdocuments/%Y/%m/%d/', blank=True)
-    ownership_document = models.FileField(_('ownership document'), upload_to='posdocuments/%Y/%m/%d/', blank=True)
-    birthcertificate = models.FileField(_('birth certificate'), upload_to='posdocuments/%Y/%m/%d/')
-    front_nationalcard = models.FileField(_('front national card'), upload_to='posdocuments/%Y/%m/%d/')
-    back_nationalcard = models.FileField(_('front national card'), upload_to='posdocuments/%Y/%m/%d/')
-    signatureseal = models.FileField(_('signature seal'), upload_to='posdocuments/%Y/%m/%d/')
-    sabin_form_first = models.FileField(_('sabin form first'), upload_to='posdocuments/%Y/%m/%d/')
-    sabin_form_second = models.FileField(_('sabin form second'), upload_to='posdocuments/%Y/%m/%d/')
+    businesslicense = models.FileField(_('businesslicense'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    leaseterm = models.FileField(_('leaseterm'), upload_to='posdocuments/%Y/%m/%d/%S/', blank=True)
+    ownership_document = models.FileField(_('ownership document'), upload_to='posdocuments/%Y/%m/%d/%S/', blank=True)
+    birthcertificate = models.FileField(_('birth certificate'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    front_nationalcard = models.FileField(_('front national card'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    back_nationalcard = models.FileField(_('front national card'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    signatureseal = models.FileField(_('signature seal'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    sabin_form_first = models.FileField(_('sabin form first'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    sabin_form_second = models.FileField(_('sabin form second'), upload_to='posdocuments/%Y/%m/%d/%S/')
 
     # Fields outside the form
     nameFamilyKarshenas = models.CharField(_('fullname Karshenas'), max_length=100, blank=True)
