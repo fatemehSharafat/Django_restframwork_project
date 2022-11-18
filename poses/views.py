@@ -11,17 +11,17 @@ from .serializers import PosRegisterSerializer, UserSerializer
 # PosRegister
 class PosRegisterListView(APIView):
 
-    def get(self, request, user):
-        posregisters = PosRegister.objects.filter(user=user)
+    def get(self, request, user_id):
+        posregisters = PosRegister.objects.filter(user_id=user_id)
         serializer = PosRegisterSerializer(posregisters, many=True, context={'request': request})
         return Response(serializer.data)
 
 
 class PosRegisterDetailView(APIView):
 
-    def get(self, request, pk, user):
+    def get(self, request, pk, user_id):
         try:
-            posregister = PosRegister.objects.get(pk=pk,user=user)
+            posregister = PosRegister.objects.get(pk=pk,user_id=user_id)
         except PosRegister.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 

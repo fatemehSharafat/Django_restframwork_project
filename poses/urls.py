@@ -8,6 +8,6 @@ urlpatterns = [
     path('users/<int:pk>/', UserDetailView.as_view(),name='user_detail'),
 
     #posRegister
-    path('users/<int:user>/poses/',  PosRegisterListView.as_view(),name='poses'),
-    path('users/<int:user>/poses/<int:pk>/',  PosRegisterDetailView.as_view(),name="poses-detail"),
+    path('users/<int:user_id>/poses/',  PosRegisterListView.as_view(),name='poses'),
+    path('users/<int:user>/poses/<int:pk>/',  PosRegisterDetailView.as_view(),name='poses-detail'),
 ]
