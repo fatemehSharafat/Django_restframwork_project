@@ -1,13 +1,13 @@
 from django.urls import path
 from .views import (
-    UserListView, UserDetailView, PosRegisterListView, PosRegisterDetailView
+    ParentListView, ParentDetailView, PosRegisterListView, PosRegisterDetailView
 )
 urlpatterns = [
-    #users
-    path('users/', UserListView.as_view(), name='users'),
-    path('users/<int:pk>/', UserDetailView.as_view(),name='user_detail'),
+    #Parents
+    path('parents/', ParentListView.as_view(), name='Parents'),
+    path('parents/<int:pk>/', ParentDetailView.as_view(),name='Parent_detail'),
 
     #posRegister
-    path('users/<int:user_id>/poses/',  PosRegisterListView.as_view(),name='poses'),
-    path('users/<int:user>/poses/<int:pk>/',  PosRegisterDetailView.as_view(),name='poses-detail'),
+    path('Parents/<int:Parent_id>/poses/',  PosRegisterListView.as_view(),name='poses'),
+    path('Parents/<int:Parent>/poses/<int:pk>/',  PosRegisterDetailView.as_view(),name='poses-detail'),
 ]

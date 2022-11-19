@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import PosRegister, User
+from .models import PosRegister, Parent
 
 @admin.register(PosRegister)
 class PosRegisterAdmin(admin.ModelAdmin):
@@ -13,8 +13,8 @@ class PosRegisterInlineAdmin(admin.StackedInline):
     fields = ['id', 'first_name', 'last_name', 'national_code']
     extra = 0
 
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+@admin.register(Parent)
+class ParentAdmin(admin.ModelAdmin):
     list_display = ['id','national_code']
     list_filter = ['national_code']
     search_fields = ['national_code']

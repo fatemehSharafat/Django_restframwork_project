@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'poses',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -84,7 +85,7 @@ WSGI_APPLICATION = 'khadamatikTeta_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db.kartkhan',
     }
 }
 
@@ -111,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fa'
 
 TIME_ZONE = 'Asia/Tehran'
 

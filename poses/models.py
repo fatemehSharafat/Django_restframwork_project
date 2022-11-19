@@ -2,14 +2,14 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-class User(models.Model):
+class Parent(models.Model):
     national_code = models.CharField(_('national code'), max_length=10, unique=True)
     password = models.CharField(_('password'), max_length=30)
 
     class Meta:
-        db_table = 'user'
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        db_table = 'parent'
+        verbose_name = _('parent')
+        verbose_name_plural = _('parents')
 
     def __str__(self):
         return self.national_code
@@ -29,7 +29,7 @@ class PosRegister(models.Model):
 """
 
     # parent= models.ForeignKey('self',verbose_name=_('parent'),blank=True,null=True,on_delete=models.CASCADE)
-    user = models.ForeignKey('User',verbose_name=_('parent'),related_name='posregisters',on_delete=models.CASCADE,to_field='national_code', blank=True)
+    parent = models.ForeignKey('parent',verbose_name=_('parent'),related_name='posregisters',on_delete=models.CASCADE,to_field='national_code', blank=True)
     first_name = models.CharField(_('first name'), max_length=20)
     last_name = models.CharField(_('last name'), max_length=25)
     father_name = models.CharField(_('father name'), max_length=20)
