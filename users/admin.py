@@ -11,7 +11,7 @@ class MyUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('national_code', 'password')}),
         (_('اطلاعات شخصی'), {'fields': ('first_name', 'last_name', 'phone_number', 'email')}),
-        (_('مجوزها'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'group', 'user_permissions')}),
+        (_('مجوزها'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'user_permissions')}),
         (_('تاریخ های مهم'), {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (

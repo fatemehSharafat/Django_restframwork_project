@@ -65,7 +65,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('نام'), max_length=30, blank=True)
     last_name = models.CharField(_('نام خانوادگی'), max_length=50, blank=True)
     email = models.EmailField(_('email'), unique=True, null=True, blank=True)
-    phone_number = PhoneNumberField(_('تلفن همراه'), unique=True, null=True, blank=True,
+    phone_number = models.CharField(_('تلفن همراه'),max_length=17, unique=True, null=True, blank=True,
                                           validators=[
                                               validators.RegexValidator(r'^\+?1?\d{9,15}$',
                                                                         _('شماره همراه خود راد وارد کنید.'), 'invalid')
