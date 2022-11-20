@@ -20,7 +20,6 @@ from django.template.context_processors import media
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -28,7 +27,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$^nmah75y=nc78)(vdggj^8ldofm*zd=7_h%&fp185%s020&8u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
 
 
 # Application definition
@@ -42,9 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'phonenumber_field',
 
-    'poses',
     'users',
+    'poses',
+
 ]
 
 MIDDLEWARE = [
@@ -78,17 +78,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'khadamatikTeta_backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.kartkhan',
+        'NAME': BASE_DIR / 'db.kartkhan3',
     }
 }
-
+# Authentication
+AUTH_USER_MODEL = 'users.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -108,11 +108,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'fa'
+LANGUAGE_CODE = 'en-US'
 
 TIME_ZONE = 'Asia/Tehran'
 
@@ -120,13 +119,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
 
-#Media Files
+# Media Files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
