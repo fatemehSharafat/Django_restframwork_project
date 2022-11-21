@@ -1,12 +1,17 @@
 from django.urls import path
-# from .views import
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
+
+from .views import RegisterView, GetTokenView
 
 urlpatterns = [
-    # #Parents
-    # path('parents/', ParentListView.as_view(), name='Parents'),
-    # path('parents/<int:pk>/', ParentDetailView.as_view(),name='Parent_detail'),
-    #
-    # #posRegister
-    # path('Parents/<int:Parent_id>/poses/',  PosRegisterListView.as_view(),name='poses'),
-    # path('Parents/<int:Parent>/poses/<int:pk>/',  PosRegisterDetailView.as_view(),name='poses-detail'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('get-token/', GetTokenView.as_view(), name='register'),
+
+    path('users/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('users/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

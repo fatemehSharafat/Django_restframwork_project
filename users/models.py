@@ -67,7 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email'), unique=True, null=True, blank=True)
     phone_number = models.CharField(_('تلفن همراه'),max_length=17, unique=True, null=True, blank=True,
                                           validators=[
-                                              validators.RegexValidator(r'^\+?1?\d{9,15}$',
+                                              validators.RegexValidator(r'^1?\d{9,15}$',
                                                                         _('شماره همراه خود راد وارد کنید.'), 'invalid')
                                                   ],
                                           error_messages={'unique': _('شماره وارد شده قبلا ثبت شده است!')}
@@ -156,7 +156,7 @@ class Device(models.Model):
         (ANDROID, 'android'),
     )
 
-    user = models.ForeignKey(User, related_name='device', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='devices', on_delete=models.CASCADE)
     device_uuid = models.UUIDField(_('Device UUID'), null=True)
     # notify_token = models.CharField(_('توکن های اعلانات'), max_length=200, blank=True, validators=[validators.RegexValidator(r'([a-z][A-Z][0-9])\w+',_('Notify token is not valid'), 'invalid')])
     last_login = models.DateTimeField(_('آخرین زمان ورود'), null=True)

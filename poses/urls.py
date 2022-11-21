@@ -10,4 +10,6 @@ urlpatterns = [
     #posRegister
     path('Parents/<int:Parent_id>/poses/',  PosRegisterListView.as_view(),name='poses'),
     path('Parents/<int:Parent>/poses/<int:pk>/',  PosRegisterDetailView.as_view(),name='poses-detail'),
+    # path('poses/',  PosRegisterListView.as_view(),name='poses'),
+    # path('poses/<int:pk>/',  PosRegisterDetailView.as_view(),name='poses-detail'),
 ]
