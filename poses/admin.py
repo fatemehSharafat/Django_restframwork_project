@@ -18,5 +18,5 @@ class ParentAdmin(admin.ModelAdmin):
     list_display = ['id','national_code']
     list_filter = ['national_code']
     search_fields = ['national_code']
-    inlines = [PosRegisterInlineAdmin]
+    # inlines = []
 

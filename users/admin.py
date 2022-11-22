@@ -5,7 +5,12 @@ from django.contrib.auth.models import Group
 from django.utils.translation import ugettext_lazy as _
 
 from .models import User
+from poses.models import PosRegister
 
+class PosRegisterInlineAdmin(admin.StackedInline):
+    model = PosRegister
+    fields = ['id', 'first_name', 'last_name', 'national_code','status']
+    extra = 0
 
 class MyUserAdmin(UserAdmin):
     fieldsets = (
@@ -23,6 +28,7 @@ class MyUserAdmin(UserAdmin):
     list_display = ('national_code', 'phone_number', 'email', 'is_staff')
     search_fields = ('national_code__exact',)
     ordering = ('-id',)
+    inlines = [PosRegisterInlineAdmin]
 
     def get_search_results(self, request, queryset, search_term):
         queryset, may_have_duplicates = super().get_search_results(

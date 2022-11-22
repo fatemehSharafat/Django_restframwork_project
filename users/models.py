@@ -6,7 +6,8 @@ from django.utils import timezone
 from django.core import validators
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, send_mail
 
-from phonenumber_field.modelfields import PhoneNumberField
+from utils.validators import validate_phone_number, validate_id_number
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -54,31 +55,26 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
 
     national_code = models.CharField(_('کد ملی'), max_length=32, unique=True, help_text='کد ملی خود را وارد کنید:\n',
-                                     validators=[
-                                         validators.RegexValidator(r'^[0-9]+$',
-                                                                   _('هرکاربر باید کد ملی خود را وارد کند.'),
-                                                                   'invalid'),
-                                     ],
+                                     validators=[validate_id_number],
                                      error_messages={'unique': _('یک کاربر با این کد ملی قبلا ثبت شده است')}
                                      )
 
     first_name = models.CharField(_('نام'), max_length=30, blank=True)
     last_name = models.CharField(_('نام خانوادگی'), max_length=50, blank=True)
     email = models.EmailField(_('email'), unique=True, null=True, blank=True)
-    phone_number = models.CharField(_('تلفن همراه'),max_length=17, unique=True, null=True, blank=True,
-                                          validators=[
-                                              validators.RegexValidator(r'^1?\d{9,15}$',
-                                                                        _('شماره همراه خود راد وارد کنید.'), 'invalid')
-                                                  ],
-                                          error_messages={'unique': _('شماره وارد شده قبلا ثبت شده است!')}
-                                          )
+    phone_number = models.CharField(_('تلفن همراه'), max_length=17, unique=True, null=True, blank=True,
+                                    validators=[validate_phone_number],
+                                    error_messages={'unique': _('شماره وارد شده قبلا ثبت شده است!')}
+                                    )
     # user penal admin
     is_staff = models.BooleanField(_('کاربر پنل مدیریت'), default=False,
-                                   help_text=_('با فعال کردن این گزینه این کاربر میتواند به پنل مدیریت دسترسی داشته باشد')
+                                   help_text=_(
+                                       'با فعال کردن این گزینه این کاربر میتواند به پنل مدیریت دسترسی داشته باشد')
                                    )
     # activate user in app
     is_active = models.BooleanField(_('فعال'), default=True,
-                                    help_text=_('فعال بودن این گزینه نشان دهنده آن است که عضویت کار بر در سیستم فعال است.')
+                                    help_text=_(
+                                        'فعال بودن این گزینه نشان دهنده آن است که عضویت کار بر در سیستم فعال است.')
                                     )
     date_joined = models.DateTimeField(_('تاریخ عضویت'), default=timezone.now)
     last_seen = models.DateTimeField(_(' آخرین زمان فعالیت'), null=True)
