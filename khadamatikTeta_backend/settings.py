@@ -42,11 +42,37 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'import_export',
+    'jalali_date',
 
     'users',
     'poses',
 
 ]
+
+# defaults
+JALALI_DATE_DEFAULTS = {
+    'Strftime': {
+        'date': '%y/%m/%d',
+        'datetime': '%H:%M:%S _ %y/%m/%d',
+    },
+    'Static': {
+        'js': [
+            # loading datepicker
+            'admin/djanqo_jalali.min.js',
+            # OR
+            # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.core.js',
+            # 'admin/jquery.ui.datepicker.jalali/scripts/calendar.js',
+            # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc.js',
+            # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc-fa.js',
+            # 'admin/js/main.js',
+        ],
+        'css': {
+            'all': [
+                'admin/jquery.ui.datepicker.jalali/themes/jquery-ui.min.css',
+            ]
+        }
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -84,11 +110,13 @@ WSGI_APPLICATION = 'khadamatikTeta_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.kartkhan3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_NAME,
+        'HOST': DB_HOST,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -113,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-US'
 
-TIME_ZONE = 'Asia/Tehran' #'UTC'
+TIME_ZONE = 'Asia/Tehran'  # 'UTC'
 
 USE_I18N = True
 

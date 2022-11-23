@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from users.models import User
@@ -80,7 +81,7 @@ class PosRegister(models.Model):
         ('تکمیل شده', 'تکمیل شده'),
     ]
     # parent= models.ForeignKey('self',verbose_name=_('parent'),blank=True,null=True,on_delete=models.CASCADE)
-    user = models.ForeignKey('users.User', verbose_name=_('کاربر درخواست کننده'), related_name='%(class)s',on_delete=models.CASCADE, blank=True)
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, verbose_name=_('کاربر درخواست کننده'), related_name='%(class)s',on_delete=models.CASCADE, blank=True)
     first_name = models.CharField(_('first name'), max_length=20)
     last_name = models.CharField(_('last name'), max_length=25)
     father_name = models.CharField(_('father name'), max_length=20)
