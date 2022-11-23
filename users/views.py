@@ -35,7 +35,7 @@ class RegisterView(APIView):
         # cache
         cache.set(str(phone_number), code, 2 * 60)
 
-        return Response({'code': code})
+        return Response({'code': code })
 
 
 class GetTokenView(APIView):

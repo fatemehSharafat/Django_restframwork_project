@@ -8,18 +8,18 @@ from utils.validators import (
     validate_bank_account_number
 )
 
-
-class Parent(models.Model):
-    national_code = models.CharField(_('national code'), max_length=10, unique=True, validators=[validate_id_number])
-    password = models.CharField(_('password'), max_length=30)
-
-    class Meta:
-        db_table = 'parent'
-        verbose_name = _('parent')
-        verbose_name_plural = _('parents')
-
-    def __str__(self):
-        return self.national_code
+#
+# class Parent(models.Model):
+#     national_code = models.CharField(_('national code'), max_length=10, unique=True, validators=[validate_id_number])
+#     password = models.CharField(_('password'), max_length=30)
+#
+#     class Meta:
+#         db_table = 'parent'
+#         verbose_name = _('parent')
+#         verbose_name_plural = _('parents')
+#
+#     def __str__(self):
+#         return self.national_code
 
 
 class PosRegister(models.Model):
@@ -80,8 +80,7 @@ class PosRegister(models.Model):
         ('تکمیل شده', 'تکمیل شده'),
     ]
     # parent= models.ForeignKey('self',verbose_name=_('parent'),blank=True,null=True,on_delete=models.CASCADE)
-    user = models.ForeignKey('users.User', verbose_name=_('کاربر درخواست کننده'), related_name='%(class)s',
-                               on_delete=models.CASCADE, blank=True)
+    user = models.ForeignKey('users.User', verbose_name=_('کاربر درخواست کننده'), related_name='%(class)s',on_delete=models.CASCADE, blank=True)
     first_name = models.CharField(_('first name'), max_length=20)
     last_name = models.CharField(_('last name'), max_length=25)
     father_name = models.CharField(_('father name'), max_length=20)
