@@ -68,7 +68,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                                     error_messages={'unique': _('شماره وارد شده قبلا ثبت شده است!')}
                                     )
     # user penal admin
-    is_staff = models.BooleanField(_('کاربر پنل مدیریت'), default=False,
+    is_staff = models.BooleanField(_('کاربر جمع آوری اطلاعات'), default=False,
                                    help_text=_(
                                        'با فعال کردن این گزینه این کاربر میتواند به پنل مدیریت دسترسی داشته باشد')
                                    )
@@ -160,11 +160,11 @@ class Device(models.Model):
     device_type = models.PositiveSmallIntegerField(choices=DEVICE_TYPE_CHOICES, default=WEB)
     device_os = models.CharField(_('نوع سیستم عامل'), max_length=20, blank=True)
     device_model = models.CharField(_('مدل device'), max_length=50, blank=True)
-    app_version = models.CharField(_('app version'), max_length=20, blank=True)
+    app_version = models.CharField(_('نسخه برنامه'), max_length=20, blank=True)
     created_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = 'user_devices'
-        verbose_name = _('device')
-        verbose_name_plural = _('devices')
+        verbose_name = _('اطلاعات دستگاه')
+        verbose_name_plural = _('اطلاعات دستگاه ها')
         unique_together = ('user', 'device_uuid')

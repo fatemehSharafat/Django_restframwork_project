@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
+from jalali_date.fields import JalaliDateField, SplitJalaliDateTimeField
+from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
 from users.models import User
 from utils.validators import (
     validate_phone_number, validate_postal_code,
@@ -36,18 +38,18 @@ class PosRegister(models.Model):
         )
         file_type =models.PositveSmallIntegerField(_('file type'), choices=FILE_TYPES, default=FILE_AUDIO)
     """
-    substrate_type = [
+    SUBSTRATE_TYPES = [
         ('Dialup', 'Dialup Type'),
         ('GPRS', 'GPRS Type'),
         ('Combo', 'Combo Type'),
         ('WIFI', 'WIFI Type'),
     ]
-    ownership_type = [
+    OWNERSHIP_TYPES = [
         ('ملکی', 'نوع ملکی'),
         ('سرقفلی', 'نوع سرقفلی'),
         ('استیجاری', 'نوع استیجاری'),
     ]
-    bank_name = [
+    BANK_NAME_TYPES = [
         ('ایران زمین', 'نوع ایران زمین'),
         ('آینده', 'نوع آینده'),
         ('پست بانک', 'نوع پست بانک'),
@@ -71,7 +73,7 @@ class PosRegister(models.Model):
         ('صنعت و معدن', 'صنعت و معدن'),
         ('کار آفرین', 'کار آفرین'),
     ]
-    status_type = [
+    STATUS_TYPES = [
         ('در انتظار بررسی ', 'در انتظار بررسی'),
         ('مشاهده درخواست', 'مشاهده درخواست'),
         ('درحال بررسی', 'درحال بررسی'),
@@ -80,70 +82,76 @@ class PosRegister(models.Model):
         ('در حال صدور', 'در حال صدور'),
         ('تکمیل شده', 'تکمیل شده'),
     ]
-    # parent= models.ForeignKey('self',verbose_name=_('parent'),blank=True,null=True,on_delete=models.CASCADE)
-    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, verbose_name=_('کاربر درخواست کننده'), related_name='%(class)s',on_delete=models.CASCADE, blank=True)
-    first_name = models.CharField(_('first name'), max_length=20)
-    last_name = models.CharField(_('last name'), max_length=25)
-    father_name = models.CharField(_('father name'), max_length=20)
-    birth = models.DateField(_('date of birth'))
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, verbose_name=_('کارشناس فروش'), related_name='%(class)s',on_delete=models.CASCADE, blank=True)
+    first_name = models.CharField(_('نام'), max_length=20)
+    last_name = models.CharField(_('نام خانوادگی'), max_length=25)
+    father_name = models.CharField(_('نام پدر'), max_length=20)
+    birth = models.DateField(_('تاریخ تولد'))
+    mobile = models.CharField(_('تلفن همراه'), max_length=11, validators=[validate_phone_number])
     # national_code = models.ForeignKey('Login',verbose_name=_('national code'), on_delete=models.CASCADE, to_field='national_code')
-    national_code = models.CharField(_('national code'), max_length=10, validators=[validate_id_number])
-    national_card_series = models.CharField(_('National card series'), max_length=10, blank=True)
-    birthcertificate_number = models.CharField(_('birth certificate number'), max_length=10)
-    birthcertificate_serial = models.CharField(_('birth certificate serial'), max_length=6)
-    birthcertificate_series = models.CharField(_('birth certificate series'), max_length=3)
-    issued = models.CharField(_('issued'), max_length=50)
-    state = models.CharField(_('state'), max_length=50)
-    city = models.CharField(_('city'), max_length=50)
-    store_address = models.CharField(_('store address'), max_length=300)
-    zipcode_pos = models.CharField(_('zip code pos'), max_length=10, validators=[validate_postal_code])
-    store_phone = models.CharField(_('store phone'), max_length=12, validators=[validate_phone_number])
-    business_license_number = models.CharField(_('business license number'), max_length=50)
-    tax_code = models.CharField(_('tax tracking code'), max_length=50)
-    senf = models.CharField(_('senf'), max_length=25)
-    mobile = models.CharField(_('Mobile'), max_length=11, validators=[validate_phone_number])
-    substrate = models.CharField(_(' substrate type'), max_length=6, choices=substrate_type,default='Dialup')  # Dialup, GPRS, Combo, WIFI
-    ownership = models.CharField(_('ownership type'), max_length=8, choices=ownership_type,default='ملکی')  # ملکی، سرقفلی، استیجاری
-    leaseterm_from = models.DateField(_('leaseterm from'), blank=True)
-    leaseterm_to = models.DateField(_('leaseterm to'), blank=True)
-    introducer_name = models.CharField(_('introducer name'), max_length=20)
-    introducer_lastname = models.CharField(_('introducer last name'), max_length=25)
-    introducer_phone = models.CharField(_('introducer phone'), max_length=12, validators=[validate_phone_number])
-    introducer_address = models.CharField(_('introducer address'), max_length=300, blank=True)
-    first_account_number = models.CharField(_('first account number'), max_length=13,
+    national_code = models.CharField(_('کدملی'), max_length=10, validators=[validate_id_number])
+    national_card_series = models.CharField(_('سریال پشت کارت ملی'), max_length=10, blank=True)
+    birthcertificate_number = models.CharField(_('شماره شناسنامه/کدثبتی'), max_length=10)
+    birthcertificate_serial = models.CharField(_('سریال شناسنامه'), max_length=6)
+    birthcertificate_series = models.CharField(_('سری شناسنامه'), max_length=3)
+    issued = models.CharField(_('صادره از/ثبت شده در'), max_length=50)
+    state = models.CharField(_('استان'), max_length=50)
+    city = models.CharField(_('شهر'), max_length=50)
+    store_name = models.CharField(_('نام فروشگاه/شرکت'), max_length=60)
+    store_address = models.CharField(_('نشانی فروشگاه/شرکت'), max_length=300)
+    zipcode_pos = models.CharField(_('کدپستی محل نصب'), max_length=10, validators=[validate_postal_code])
+    store_phone = models.CharField(_('تلفن فروشگاه'), max_length=12, validators=[validate_phone_number])
+    business_license_number = models.CharField(_('شماره پروانه کسب/شماره صنفی اجاره نامه'), max_length=50)
+    tax_code = models.CharField(_('کد رهگیری مالیاتی'), max_length=50)
+    senf = models.CharField(_('صنف'), max_length=25)
+    substrate = models.CharField(_(' بستر ارتباطی'), max_length=6, choices=SUBSTRATE_TYPES,default='Dialup')  # Dialup, GPRS, Combo, WIFI
+    ownership = models.CharField(_('نوع مالکیت محل نصب'), max_length=8, choices= OWNERSHIP_TYPES,default='ملکی')  # ملکی، سرقفلی، استیجاری
+    leaseterm_from = models.DateField(_('مهلت اجاره نامه از تاریخ'), blank=True)
+    leaseterm_to = models.DateField(_('مهلت اجاره نامه تا تاریخ'), blank=True)
+    first_introducer_name = models.CharField(_('نام معرف اول'), max_length=20)
+    first_introducer_lastname = models.CharField(_('نام خانوادگی  معرف اول'), max_length=25)
+    first_introducer_phone = models.CharField(_('تلفن همراه  معرف اول '), max_length=12, validators=[validate_phone_number])
+    first_introducer_address = models.CharField(_('نشانی محل سکونت  معرف اول '), max_length=300, blank=True)
+    second_introducer_name = models.CharField(_('نام  معرف دوم'), max_length=20, blank=True)
+    second_introducer_lastname = models.CharField(_('نام خانوادگی  معرف دوم'), max_length=25)
+    second_introducer_phone = models.CharField(_('تلفن همراه  معرف دوم '), max_length=12, validators=[validate_phone_number], blank=True)
+    second_introducer_address = models.CharField(_('نشانی محل سکونت  معرف دوم '), max_length=300, blank=True)
+    first_account_number = models.CharField(_('شماره حساب اول'), max_length=13,
                                             validators=[validate_bank_account_number])
 
-    first_bank_name = models.CharField(_('first bank name'), max_length=50, choices=bank_name, default='ایران زمین')
-    first_shaba_number = models.CharField(_('first shaba number'), max_length=26, validators=[validate_iban_number])
-    second_account_number = models.CharField(_('second account number'), max_length=13,
+    first_bank_name = models.CharField(_('نام بانک اول'), max_length=50, choices= BANK_NAME_TYPES, default='ایران زمین')
+    first_shaba_number = models.CharField(_('شماره شبا اول'), max_length=26, validators=[validate_iban_number])
+    second_account_number = models.CharField(_('شماره حساب دوم'), max_length=13,
                                              validators=[validate_bank_account_number], blank=True)
-    second_bank_name = models.CharField(_('second bank name'), max_length=50, choices=bank_name, default='ایران زمین',
+    second_bank_name = models.CharField(_('نام بانک دوم'), max_length=50, choices= BANK_NAME_TYPES, default='ایران زمین',
                                         blank=True)
-    second_shaba_number = models.CharField(_('second shaba number'), max_length=36, validators=[validate_iban_number],
+    second_shaba_number = models.CharField(_('شماره شبا دوم'), max_length=36, validators=[validate_iban_number],
                                            blank=True)
-    paziresh = models.BooleanField(_('paziresh'), default=False)
-    businesslicense = models.FileField(_('businesslicense'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    leaseterm = models.FileField(_('leaseterm'), upload_to=f'posdocuments/%Y/%m/%d/%S/', blank=True)
-    ownership_document = models.FileField(_('ownership document'), upload_to='posdocuments/%Y/%m/%d/%S/', blank=True)
-    birthcertificate = models.FileField(_('birth certificate'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    front_nationalcard = models.FileField(_('front national card'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    back_nationalcard = models.FileField(_('front national card'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    signatureseal = models.FileField(_('signature seal'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    sabin_form_first = models.FileField(_('sabin form first'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    sabin_form_second = models.FileField(_('sabin form second'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    paziresh = models.BooleanField(_('پذیرش صحت اطلاعات'), default=False)
+    businesslicense = models.FileField(_('جواز کسب'), upload_to='posdocuments/%Y/%m/%d/%s/')
+    leaseterm = models.FileField(_('اجاره نامه'), upload_to=f'posdocuments/%Y/%m/%d/%S/', blank=True)
+    ownership_document = models.FileField(_('سند مالکیت'), upload_to='posdocuments/%Y/%m/%d/%S/', blank=True)
+    birthcertificate = models.FileField(_('تصویر دو صفحه اول شناسنامه'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    birthcertificate = models.FileField(_('تصویر رو کارت ملی'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    back_nationalcard = models.FileField(_('تصویر پشت کارت ملی'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    signatureseal = models.FileField(_('تصویر مهر و امضا'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    sabin_form_first = models.FileField(_('تصویر صفحه اول فرم سابین'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    sabin_form_second = models.FileField(_('تصویر صفحه دوم فرم سابین'), upload_to='posdocuments/%Y/%m/%d/%S/')
 
     # Fields outside the form
-    nameFamilyKarshenas = models.CharField(_('fullname Karshenas'), max_length=100, blank=True)
-    cerated_time = models.DateTimeField(_('cerated time'), auto_now_add=True)
-    updated_time = models.DateTimeField(_('updated time'), auto_now=True)
-    status = models.CharField(_('status'), max_length=60, choices=status_type, default='در انتظار بررسی', blank=True)
+    cerated_time = models.DateTimeField(_('زمان ثبت درخواست'), auto_now_add=True)
+    updated_time = models.DateTimeField(_('زمان بروزرسانی'), auto_now=True)
+    status = models.CharField(_('وضعیت'), max_length=60, choices= STATUS_TYPES, default='در انتظار بررسی', blank=True)
 
     class Meta:
         db_table = 'posdocuments'
-        verbose_name = _('Card reader request')
-        verbose_name_plural = _('Card reader request')
+        verbose_name = _('درخواست کارتخوان')
+        verbose_name_plural = _('درخواست های کارتخوان')
 
     def __str__(self):
-        return _('request') + self.national_code
+        return "  کارشناس فروش %s" % ( self.user.get_full_name())
+            # _(' کارشناس فروش ') + str(self.user.first_name)
 
+    def get_media_file_name(self):
+        return "posRegister_documents/user_%s/request_%s/" % (str(self.user.national_code), self.objects.count())
 

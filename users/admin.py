@@ -7,12 +7,16 @@ from django.utils.translation import ugettext_lazy as _
 from .models import User
 from poses.models import PosRegister
 
+from import_export.admin import ImportExportModelAdmin
+
+
 class PosRegisterInlineAdmin(admin.StackedInline):
     model = PosRegister
-    fields = ['id', 'first_name', 'last_name', 'national_code','status']
+    fields = ['id', 'first_name', 'last_name', 'national_code', 'status']
     extra = 0
 
-class MyUserAdmin(UserAdmin):
+
+class MyUserAdmin(ImportExportModelAdmin, UserAdmin):
     fieldsets = (
         (None, {'fields': ('national_code', 'password')}),
         (_('اطلاعات شخصی'), {'fields': ('first_name', 'last_name', 'phone_number', 'email')}),
@@ -22,7 +26,7 @@ class MyUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide'),
-            'fields': ('national_code', 'phone_number', 'password1', 'password2'),
+            'fields': ('first_name', 'last_name', 'national_code', 'phone_number', 'password1', 'password2'),
         }),
     )
     list_display = ('national_code', 'phone_number', 'email', 'is_staff')

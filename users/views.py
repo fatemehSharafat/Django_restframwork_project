@@ -10,7 +10,7 @@ from rest_framework import status
 from .models import User, Device
 
 
-class RegisterView(APIView):
+class LoginView(APIView):
 
     def post(self, request):
         phone_number = request.data.get('phone_number')
@@ -24,8 +24,10 @@ class RegisterView(APIView):
             # return Response({'detail': 'User already registered!'},
             #                 status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
-            user = User.objects.create_user(phone_number=phone_number,national_code=national_code)
+            # user = User.objects.create_user(phone_number=phone_number, national_code=national_code)
             # user, created = User.objects.get_or_create(phone_number=phone_number,national_code=national_code)
+            return Response({'detail': 'چنین کاربری تعریف نشده!'},status=status.HTTP_404_NOT_FOUND)
+
 
         device = Device.objects.create(user=user)
 
