@@ -84,8 +84,11 @@ WSGI_APPLICATION = 'khadamatikTeta_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.kartkhan3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_NAME,
+        'HOST': DB_HOST,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
     }
 }
 
@@ -111,9 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-US'
+LANGUAGE_CODE = 'fa'  # 'en-US'
 
-TIME_ZONE = 'Asia/Tehran' #'UTC'
+TIME_ZONE = 'Asia/Tehran'  # 'UTC'
 
 USE_I18N = True
 

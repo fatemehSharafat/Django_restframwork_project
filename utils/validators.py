@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class PhonNumberValidator(RegexValidator):
-    regex = '^(98|0)(9[0-3,9]\d{8}|[1-9]\d{9})$'
+    regex = '^(98|0)(9[0-3,9]\d{8}|[1-9]\d{9}$)'
     message =_('یک شماره تلفن معتبر وارد کنید. (تلفن های ثابت با کد شهر وارد شود)')
     code = 'invalid_phone_number'
 
