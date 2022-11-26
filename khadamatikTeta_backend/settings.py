@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+import locale
 from pathlib import Path
 from datetime import timedelta
 
@@ -48,17 +49,16 @@ INSTALLED_APPS = [
     'poses',
 
 ]
-
-# defaults
+# default settings
 JALALI_DATE_DEFAULTS = {
-    'Strftime': {
+   'Strftime': {
         'date': '%y/%m/%d',
         'datetime': '%H:%M:%S _ %y/%m/%d',
     },
     'Static': {
         'js': [
             # loading datepicker
-            'admin/djanqo_jalali.min.js',
+            'admin/js/django_jalali.min.js',
             # OR
             # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.core.js',
             # 'admin/jquery.ui.datepicker.jalali/scripts/calendar.js',
@@ -68,12 +68,11 @@ JALALI_DATE_DEFAULTS = {
         ],
         'css': {
             'all': [
-                'admin/jquery.ui.datepicker.jalali/themes/jquery-ui.min.css',
+                'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css',
             ]
         }
     },
 }
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -146,7 +145,7 @@ TIME_ZONE = 'Asia/Tehran'  # 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
+locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 

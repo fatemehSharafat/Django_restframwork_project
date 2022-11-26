@@ -2,8 +2,6 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from jalali_date.fields import JalaliDateField, SplitJalaliDateTimeField
-from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
 from users.models import User
 from utils.validators import (
     validate_phone_number, validate_postal_code,
@@ -27,6 +25,11 @@ from utils.validators import (
 
 class PosRegister(models.Model):
     # Defining different types
+
+    def get_media_file_name(self,request):
+        return "posRegister_documents/user_%s/request_%s/" % (str(self.user.national_code), str(PosRegister.objects.filter(user=self.user_id).count()))
+
+
     """
         FILE_AUDIO = 1
         FILE_VIDEO = 2
@@ -74,13 +77,14 @@ class PosRegister(models.Model):
         ('کار آفرین', 'کار آفرین'),
     ]
     STATUS_TYPES = [
-        ('در انتظار بررسی ', 'در انتظار بررسی'),
-        ('مشاهده درخواست', 'مشاهده درخواست'),
+        ('ثبت درخواست ', 'ثبت درخواست'),
+        ('مشاهده شد', 'مشاهده شد'),
         ('درحال بررسی', 'درحال بررسی'),
-        ('موافقت با درخواست', 'موافقت با درخواست'),
-        ('رد درخواست', 'رد درخواست'),
-        ('در حال صدور', 'در حال صدور'),
-        ('تکمیل شده', 'تکمیل شده'),
+        ('رد درخواست (نامرتبط بودن صنف)', 'رد از طرف شرکت (نامرتبط بودن صنف)'),
+        ('ثبت شاپرک', 'ثبت شاپرک'),
+        ('رد به علت نقص مدارک', 'رد به علت نقص مدارک'),
+        ('اختصاص ترمینال', 'اختصاص ترمینال'),
+        ('نصب شد', 'نصب شد'),
     ]
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, verbose_name=_('کارشناس فروش'), related_name='%(class)s',on_delete=models.CASCADE, blank=True)
     first_name = models.CharField(_('نام'), max_length=20)
@@ -127,20 +131,20 @@ class PosRegister(models.Model):
     second_shaba_number = models.CharField(_('شماره شبا دوم'), max_length=36, validators=[validate_iban_number],
                                            blank=True)
     paziresh = models.BooleanField(_('پذیرش صحت اطلاعات'), default=False)
-    businesslicense = models.FileField(_('جواز کسب'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    leaseterm = models.FileField(_('اجاره نامه'), upload_to=f'posdocuments/%Y/%m/%d/%S/', blank=True)
-    ownership_document = models.FileField(_('سند مالکیت'), upload_to='posdocuments/%Y/%m/%d/%S/', blank=True)
-    birthcertificate = models.FileField(_('تصویر دو صفحه اول شناسنامه'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    birthcertificate = models.FileField(_('تصویر رو کارت ملی'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    back_nationalcard = models.FileField(_('تصویر پشت کارت ملی'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    signatureseal = models.FileField(_('تصویر مهر و امضا'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    sabin_form_first = models.FileField(_('تصویر صفحه اول فرم سابین'), upload_to='posdocuments/%Y/%m/%d/%S/')
-    sabin_form_second = models.FileField(_('تصویر صفحه دوم فرم سابین'), upload_to='posdocuments/%Y/%m/%d/%S/')
+    businesslicense = models.FileField(_('جواز کسب'), upload_to=get_media_file_name)
+    leaseterm = models.FileField(_('اجاره نامه'), upload_to=get_media_file_name, blank=True)
+    ownership_document = models.FileField(_('سند مالکیت'), upload_to=get_media_file_name, blank=True)
+    birthcertificate = models.FileField(_('تصویر دو صفحه اول شناسنامه'), upload_to=get_media_file_name)
+    front_nationalcard = models.FileField(_('تصویر رو کارت ملی'), upload_to=get_media_file_name)
+    back_nationalcard = models.FileField(_('تصویر پشت کارت ملی'), upload_to=get_media_file_name)
+    signatureseal = models.FileField(_('تصویر مهر و امضا'), upload_to=get_media_file_name)
+    sabin_form_first = models.FileField(_('تصویر صفحه اول فرم سابین'), upload_to=get_media_file_name)
+    sabin_form_second = models.FileField(_('تصویر صفحه دوم فرم سابین'), upload_to=get_media_file_name)
 
     # Fields outside the form
     cerated_time = models.DateTimeField(_('زمان ثبت درخواست'), auto_now_add=True)
     updated_time = models.DateTimeField(_('زمان بروزرسانی'), auto_now=True)
-    status = models.CharField(_('وضعیت'), max_length=60, choices= STATUS_TYPES, default='در انتظار بررسی', blank=True)
+    status = models.CharField(_('وضعیت'), max_length=60, choices= STATUS_TYPES, default='ثبت درخواست', blank=True)
 
     class Meta:
         db_table = 'posdocuments'
@@ -148,9 +152,5 @@ class PosRegister(models.Model):
         verbose_name_plural = _('درخواست های کارتخوان')
 
     def __str__(self):
-        return "  کارشناس فروش %s" % ( self.user.get_full_name())
+        return " %s کارشناس فروش" % ( self.user.get_full_name())
             # _(' کارشناس فروش ') + str(self.user.first_name)
-
-    def get_media_file_name(self):
-        return "posRegister_documents/user_%s/request_%s/" % (str(self.user.national_code), self.objects.count())
-
