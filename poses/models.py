@@ -113,7 +113,7 @@ class PosRegister(models.Model):
     first_introducer_phone = models.CharField(_('تلفن همراه  معرف اول '), max_length=12, validators=[validate_phone_number])
     first_introducer_address = models.CharField(_('نشانی محل سکونت  معرف اول '), max_length=300, blank=True)
     second_introducer_name = models.CharField(_('نام  معرف دوم'), max_length=20, blank=True)
-    second_introducer_lastname = models.CharField(_('نام خانوادگی  معرف دوم'), max_length=25)
+    second_introducer_lastname = models.CharField(_('نام خانوادگی  معرف دوم'), max_length=25,blank=True)
     second_introducer_phone = models.CharField(_('تلفن همراه  معرف دوم '), max_length=12, validators=[validate_phone_number], blank=True)
     second_introducer_address = models.CharField(_('نشانی محل سکونت  معرف دوم '), max_length=300, blank=True)
     first_account_number = models.CharField(_('شماره حساب اول'), max_length=13,
@@ -121,14 +121,13 @@ class PosRegister(models.Model):
 
     first_bank_name = models.CharField(_('نام بانک اول'), max_length=50, choices= BANK_NAME_TYPES, default='ایران زمین')
     first_shaba_number = models.CharField(_('شماره شبا اول'), max_length=26, validators=[validate_iban_number])
-    second_account_number = models.CharField(_('شماره حساب دوم'), max_length=13,
-                                             validators=[validate_bank_account_number], blank=True)
+    second_account_number = models.CharField(_('شماره حساب دوم'), max_length=13,validators=[validate_bank_account_number], blank=True)
     second_bank_name = models.CharField(_('نام بانک دوم'), max_length=50, choices= BANK_NAME_TYPES, default='ایران زمین',
                                         blank=True)
     second_shaba_number = models.CharField(_('شماره شبا دوم'), max_length=36, validators=[validate_iban_number],
                                            blank=True)
     paziresh = models.BooleanField(_('پذیرش صحت اطلاعات'), default=False)
-    businesslicense = models.FileField(_('جواز کسب'), upload_to='posdocuments/%Y/%m/%d/%s/')
+    businesslicense = models.FileField(_('جواز کسب'), upload_to='posdocuments/%Y/%m/%d/%S/')
     leaseterm = models.FileField(_('اجاره نامه'), upload_to=f'posdocuments/%Y/%m/%d/%S/', blank=True)
     ownership_document = models.FileField(_('سند مالکیت'), upload_to='posdocuments/%Y/%m/%d/%S/', blank=True)
     birthcertificate = models.FileField(_('تصویر دو صفحه اول شناسنامه'), upload_to='posdocuments/%Y/%m/%d/%S/')

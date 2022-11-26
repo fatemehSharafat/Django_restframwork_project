@@ -114,7 +114,7 @@ DATABASES = {
         'NAME': DB_NAME,
         'HOST': DB_HOST,
         'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD
+        'PASSWORD': DB_PASSWORD,
     }
 }
 
@@ -139,7 +139,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE =  'fa' #'en-US'
+LANGUAGE_CODE = 'fa'  # 'en-US'
 
 TIME_ZONE = 'Asia/Tehran'  # 'UTC'
 
