@@ -40,7 +40,7 @@ class PosRegisterAdmin(ImportExportModelAdmin,ModelAdminJalaliMixin, admin.Model
     get_updated_time_jalali.admin_order_field = 'updated_time'
 
     def get_birth_jalali(self, obj):
-        return date2jalali(obj.updated_time).strftime('%y/%m/%d')
+        return date2jalali(obj.birth).strftime('%y/%m/%d')
 
     get_birth_jalali.short_description = 'تاریخ تولد'
     get_birth_jalali.admin_order_field = 'birth'

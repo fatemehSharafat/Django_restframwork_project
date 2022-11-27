@@ -9,27 +9,17 @@ from utils.validators import (
     validate_bank_account_number
 )
 
-#
-# class Parent(models.Model):
-#     national_code = models.CharField(_('national code'), max_length=10, unique=True, validators=[validate_id_number])
-#     password = models.CharField(_('password'), max_length=30)
-#
-#     class Meta:
-#         db_table = 'parent'
-#         verbose_name = _('parent')
-#         verbose_name_plural = _('parents')
-#
-#     def __str__(self):
-#         return self.national_code
-
-
 class PosRegister(models.Model):
-    # Defining different types
 
-    def get_media_file_name(self,request):
-        return "posRegister_documents/user_%s/request_%s/" % (str(self.user.national_code), str(PosRegister.objects.filter(user=self.user_id).count()))
+    def get_media_file_name(self, request):
+        """
+            #The first mode:
+                return "posRegister_documents/user_%s/request_%s/%s" % (str(self.user.national_code), str(self.id), str(request))
+            #//  posRegister_documents/user_national_code/request_id/file_nam
+        """
+        return "posRegister_documents/request_%s/%s" % (str(self.id), str(request))
 
-
+        # Defining different types
     """
         FILE_AUDIO = 1
         FILE_VIDEO = 2
@@ -116,20 +106,16 @@ class PosRegister(models.Model):
     first_introducer_lastname = models.CharField(_('نام خانوادگی  معرف اول'), max_length=25)
     first_introducer_phone = models.CharField(_('تلفن همراه  معرف اول '), max_length=12, validators=[validate_phone_number])
     first_introducer_address = models.CharField(_('نشانی محل سکونت  معرف اول '), max_length=300, blank=True)
-    second_introducer_name = models.CharField(_('نام  معرف دوم'), max_length=20, blank=True)
-    second_introducer_lastname = models.CharField(_('نام خانوادگی  معرف دوم'), max_length=25,blank=True)
-    second_introducer_phone = models.CharField(_('تلفن همراه  معرف دوم '), max_length=12, validators=[validate_phone_number], blank=True)
-    second_introducer_address = models.CharField(_('نشانی محل سکونت  معرف دوم '), max_length=300, blank=True)
-    first_account_number = models.CharField(_('شماره حساب اول'), max_length=13,
-                                            validators=[validate_bank_account_number])
-
+    second_introducer_name = models.CharField(_('نام  معرف دوم'), max_length=20, blank=True,null=True)
+    second_introducer_lastname = models.CharField(_('نام خانوادگی  معرف دوم'), max_length=25,blank=True,null=True)
+    second_introducer_phone = models.CharField(_('تلفن همراه  معرف دوم '), max_length=12, validators=[validate_phone_number], blank=True,null=True)
+    second_introducer_address = models.CharField(_('نشانی محل سکونت  معرف دوم '), max_length=300, blank=True,null=True)
+    first_account_number = models.CharField(_('شماره حساب اول'), max_length=13,validators=[validate_bank_account_number])
     first_bank_name = models.CharField(_('نام بانک اول'), max_length=50, choices= BANK_NAME_TYPES, default='ایران زمین')
     first_shaba_number = models.CharField(_('شماره شبا اول'), max_length=26, validators=[validate_iban_number])
     second_account_number = models.CharField(_('شماره حساب دوم'), max_length=13,validators=[validate_bank_account_number], blank=True)
-    second_bank_name = models.CharField(_('نام بانک دوم'), max_length=50, choices= BANK_NAME_TYPES, default='ایران زمین',
-                                        blank=True)
-    second_shaba_number = models.CharField(_('شماره شبا دوم'), max_length=36, validators=[validate_iban_number],
-                                           blank=True)
+    second_bank_name = models.CharField(_('نام بانک دوم'), max_length=50, choices= BANK_NAME_TYPES, default='ایران زمین', blank=True)
+    second_shaba_number = models.CharField(_('شماره شبا دوم'), max_length=36, validators=[validate_iban_number], blank=True)
     paziresh = models.BooleanField(_('پذیرش صحت اطلاعات'), default=False)
     businesslicense = models.FileField(_('جواز کسب'), upload_to=get_media_file_name)
     leaseterm = models.FileField(_('اجاره نامه'), upload_to=get_media_file_name, blank=True)
@@ -152,5 +138,7 @@ class PosRegister(models.Model):
         verbose_name_plural = _('درخواست های کارتخوان')
 
     def __str__(self):
-        return " %s کارشناس فروش" % ( self.user.get_full_name())
-            # _(' کارشناس فروش ') + str(self.user.first_name)
+        return " %s کارشناس فروش" % (self.user.get_full_name() + self.user.national_code)
+
+    def get_object_number(self):
+        return PosRegister.objects.filter(user=self.user_id).count()
