@@ -12,7 +12,7 @@ from utils.validators import (
 
 class PosRegister(models.Model):
     def get_media_file_name(self, request):
-        """mid
+        """
             #The first mode:
                 return "posRegister_documents/user_%s/request_%s/%s" % (str(self.user.national_code), str(self.id), str(request))
             #//  posRegister_documents/user_national_code/request_id/file_nam
