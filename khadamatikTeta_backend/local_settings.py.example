@@ -1,5 +1,6 @@
-DEBUG = True/False
-IS_DEVEL = True/False
+
+DEBUG = boolean(True/False)
+IS_DEVEL = True
 
 ALLOWED_HOSTS = []
 

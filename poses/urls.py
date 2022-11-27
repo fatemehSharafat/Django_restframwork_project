@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (
-     PosRegisterView, PosRegisterDetailView
+     PosRegisterView, PosRegisterDetailView, PosRegisterListView
 )
 urlpatterns = [
     #Parents
@@ -10,6 +10,7 @@ urlpatterns = [
     #posRegister
     # path('Parents/<int:Parent_id>/poses/',  PosRegisterListView.as_view(),name='poses'),
     # path('Parents/<int:Parent>/poses/<int:pk>/',  PosRegisterDetailView.as_view(),name='poses-detail'),
-    path('poses/',  PosRegisterView.as_view(),name='poses'),
+    path('poses/pos-register/',  PosRegisterView.as_view(),name='pos-register'),
+    path('poses/pos-list/',  PosRegisterListView.as_view(),name='pos-list'),
     path('poses/<int:pk>/',  PosRegisterDetailView.as_view(),name='poses-detail'),
 ]

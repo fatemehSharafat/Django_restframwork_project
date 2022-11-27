@@ -4,19 +4,20 @@ from django.contrib.auth.models import Group
 # from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 
+from import_export.admin import ImportExportModelAdmin
+from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin
+
 from .models import User
 from poses.models import PosRegister
 
-from import_export.admin import ImportExportModelAdmin
 
-
-class PosRegisterInlineAdmin(admin.StackedInline):
+class PosRegisterInlineAdmin(StackedInlineJalaliMixin, admin.StackedInline):
     model = PosRegister
     fields = ['id', 'first_name', 'last_name', 'national_code', 'status']
     extra = 0
 
 
-class MyUserAdmin(ImportExportModelAdmin, UserAdmin):
+class MyUserAdmin(ImportExportModelAdmin, ModelAdminJalaliMixin, UserAdmin):
     fieldsets = (
         (None, {'fields': ('national_code', 'password')}),
         (_('اطلاعات شخصی'), {'fields': ('first_name', 'last_name', 'phone_number', 'email')}),

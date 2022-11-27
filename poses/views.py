@@ -1,9 +1,12 @@
-# from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from rest_framework.renderers import JSONRenderer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.renderers import TemplateHTMLRenderer
+
 
 from .models import PosRegister
 from .serializers import PosRegisterSerializer
@@ -12,7 +15,8 @@ from .serializers import PosRegisterSerializer
 # PosRegister
 class PosRegisterView(APIView):
     permission_classes = [IsAuthenticated]
-
+    # renderer_classes = [TemplateHTMLRenderer]
+    # template_name = '.html'
     def post(self,request):
         first_name= request.data.get('first_name')
         last_name = request.data.get('last_name')
@@ -35,10 +39,14 @@ class PosRegisterView(APIView):
         ownership = request.data.get('ownership')
         leaseterm_from = request.data.get('leaseterm_from')
         leaseterm_to = request.data.get('leaseterm_to')
-        introducer_name = request.data.get('introducer_name')
-        introducer_lastname = request.data.get('introducer_lastname')
-        introducer_phone = request.data.get('introducer_phone')
-        introducer_address = request.data.get('introducer_address')
+        first_introducer_name = request.data.get('first_introducer_name')
+        first_introducer_lastname = request.data.get('first_introducer_lastname')
+        first_introducer_phone = request.data.get('first_introducer_phone')
+        first_introducer_address = request.data.get('first_introducer_address')
+        second_introducer_name = request.data.get('second_introducer_name')
+        second_introducer_lastname = request.data.get('second_introducer_lastname')
+        second_introducer_phone = request.data.get('second_introducer_phone')
+        second_introducer_address = request.data.get('second_introducer_address')
         first_account_number = request.data.get('first_account_number')
         first_bank_name = request.data.get('first_bank_name')
         first_shaba_number = request.data.get('first_shaba_number')
@@ -80,10 +88,14 @@ class PosRegisterView(APIView):
                ownership=ownership,
                leaseterm_from=leaseterm_from,
                leaseterm_to=leaseterm_to,
-               introducer_name=introducer_name,
-               introducer_lastname=introducer_lastname,
-               introducer_phone=introducer_phone,
-               introducer_address=introducer_address,
+               first_introducer_name=first_introducer_name,
+               first_introducer_lastname=first_introducer_lastname,
+               first_introducer_phone=first_introducer_phone,
+               first_introducer_address=first_introducer_address,
+               second_introducer_name=second_introducer_name,
+               second_introducer_lastname=second_introducer_lastname,
+               second_introducer_phone=second_introducer_phone,
+               second_introducer_address=second_introducer_address,
                first_account_number=first_account_number,
                first_bank_name=first_bank_name,
                first_shaba_number=first_shaba_number,
@@ -106,14 +118,22 @@ class PosRegisterView(APIView):
 
         return Response({'detail': 'درخواست باموفقیت ثبت شد'},status=status.HTTP_201_CREATED)
 
+
+
+class PosRegisterListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # renderer_classes = [TemplateHTMLRenderer]
+    # template_name = 'profile_detail.html'
     def get(self, request):
         posregisters = PosRegister.objects.filter(user=request.user)
         serializer = PosRegisterSerializer(posregisters, many=True, context={'request': request})
         return Response(serializer.data)
 
-
 class PosRegisterDetailView(APIView):
     permission_classes = [IsAuthenticated]
+    # renderer_classes = [TemplateHTMLRenderer]
+    # template_name = 'profile_detail.html'
 
     def get(self, request, pk):
         try:
@@ -123,6 +143,14 @@ class PosRegisterDetailView(APIView):
 
         serializer = PosRegisterSerializer(posregister, context={'request': request})
         return Response(serializer.data)
+
+    def post(self, request, pk):
+        posregister = get_object_or_404(PosRegister, pk=pk)
+        serializer = PosRegisterSerializer(posregister, data=request.data, context={'request': request})
+        if not serializer.is_valid():
+            return Response(serializer.errors)
+        serializer.save()
+        return  Response(serializer.data)
 
 
 # Parent
