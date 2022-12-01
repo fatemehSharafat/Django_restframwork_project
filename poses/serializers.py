@@ -2,6 +2,17 @@ from rest_framework import serializers
 
 from .models import PosRegister
 
+# class LoginSerializer(serializers.Serializer):
+#     email = serializers.CharField(
+#         max_length=100,
+#         style={'placeholder': 'national_code', 'autofocus': True}
+#     )
+#     password = serializers.CharField(
+#         max_length=100,
+#         style={'input_type': 'password', 'placeholder': 'Password'}
+#     )
+#     remember_me = serializers.BooleanField()
+
 class PosRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = PosRegister

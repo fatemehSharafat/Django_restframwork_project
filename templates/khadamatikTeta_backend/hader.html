@@ -1,0 +1,47 @@
+{% load static %}
+{% load i18n %}
+{% load rest_framework %}
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>{% block title %}{% if name %}{{ name }} – {% endif %}Khadamatik Teta{% endblock %}</title>
+
+{#    <link rel="stylesheet" href="{% static 'web/css/vendor/font-awesome.min.css' %}">#}
+{#    <link rel="stylesheet" href="{% static 'web/css/vendor/materialdesignicons.css' %}">#}
+    <!-- plugin-------------------------------------->
+{#    <link rel="stylesheet" href="{% static 'web/css/vendor/bootstrap.css' %}">#}
+    <link rel="stylesheet" type="text/css" href="{% static 'khadamatikTeta_backend/vendor/sweetalert2/sweetalert2.css' %}"/>
+
+    <!-- Favicons -->
+    <link rel="icon" type="text/css" href="{% static 'khadamatikTeta_backend/img/khadamatik_gorup_logo.png' %}"/>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap">
+
+    <!-- Vendor CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'khadamatikTeta_backend/vendor/bootstrap/css/bootstrap.rtl.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'khadamatikTeta_backend/vendor/bootstrap-icons/bootstrap-icons.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'khadamatikTeta_backend/vendor/aos/aos.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'khadamatikTeta_backend/vendor/glightbox/css/glightbox.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'khadamatikTeta_backend/vendor/swiper/swiper-bundle.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'khadamatikTeta_backend/vendor/dist/jalalidatepicker.min.css' %}" type="text/css" >
+
+     <!-- Variables CSS Files -->
+    <link rel="stylesheet" href="{% static 'khadamatikTeta_backend/css/variables.css' %}">
+
+    <!--  Main CSS File -->
+    <link rel="stylesheet" href="{% static 'khadamatikTeta_backend/css/main.css' %}">
+
+    <!-- Toastr CSS  -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+     {% block style %}
+     {% endblock %}
+</head>
+

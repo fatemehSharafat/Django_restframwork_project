@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework.renderers import JSONRenderer
 
 from rest_framework.views import APIView
@@ -7,7 +8,6 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.renderers import TemplateHTMLRenderer
 
-
 from .models import PosRegister
 from .serializers import PosRegisterSerializer
 
@@ -15,10 +15,11 @@ from .serializers import PosRegisterSerializer
 # PosRegister
 class PosRegisterView(APIView):
     permission_classes = [IsAuthenticated]
+
     # renderer_classes = [TemplateHTMLRenderer]
     # template_name = '.html'
-    def post(self,request):
-        first_name= request.data.get('first_name')
+    def post(self, request):
+        first_name = request.data.get('first_name')
         last_name = request.data.get('last_name')
         birth = request.data.get('birth')
         national_code = request.data.get('national_code')
@@ -66,78 +67,92 @@ class PosRegisterView(APIView):
 
         try:
             PosRegister.objects.create(
-               user=request.user,
-               first_name=first_name,
-               last_name=last_name,
-               birth=birth,
-               national_code=national_code,
-               birthcertificate_number=birthcertificate_number,
-               birthcertificate_serial=birthcertificate_serial,
-               birthcertificate_series=birthcertificate_series,
-               issued=issued,
-               state=state,
-               city=city,
-               store_address=store_address,
-               zipcode_pos=zipcode_pos,
-               store_phone=store_phone,
-               business_license_number=business_license_number,
-               tax_code=tax_code,
-               senf=senf,
-               mobile=mobile,
-               substrate=substrate,
-               ownership=ownership,
-               leaseterm_from=leaseterm_from,
-               leaseterm_to=leaseterm_to,
-               first_introducer_name=first_introducer_name,
-               first_introducer_lastname=first_introducer_lastname,
-               first_introducer_phone=first_introducer_phone,
-               first_introducer_address=first_introducer_address,
-               second_introducer_name=second_introducer_name,
-               second_introducer_lastname=second_introducer_lastname,
-               second_introducer_phone=second_introducer_phone,
-               second_introducer_address=second_introducer_address,
-               first_account_number=first_account_number,
-               first_bank_name=first_bank_name,
-               first_shaba_number=first_shaba_number,
-               second_account_number=second_account_number,
-               second_bank_name=second_bank_name,
-               second_shaba_number=second_shaba_number,
-               paziresh=paziresh,
-               businesslicense=businesslicense,
-               leaseterm=leaseterm,
-               ownership_document=ownership_document,
-               birthcertificate=birthcertificate,
-               front_nationalcard=front_nationalcard,
-               back_nationalcard=back_nationalcard,
-               signatureseal=signatureseal,
-               sabin_form_first=sabin_form_first,
-               sabin_form_second=sabin_form_second,
+                user=request.user,
+                first_name=first_name,
+                last_name=last_name,
+                birth=birth,
+                national_code=national_code,
+                birthcertificate_number=birthcertificate_number,
+                birthcertificate_serial=birthcertificate_serial,
+                birthcertificate_series=birthcertificate_series,
+                issued=issued,
+                state=state,
+                city=city,
+                store_address=store_address,
+                zipcode_pos=zipcode_pos,
+                store_phone=store_phone,
+                business_license_number=business_license_number,
+                tax_code=tax_code,
+                senf=senf,
+                mobile=mobile,
+                substrate=substrate,
+                ownership=ownership,
+                leaseterm_from=leaseterm_from,
+                leaseterm_to=leaseterm_to,
+                first_introducer_name=first_introducer_name,
+                first_introducer_lastname=first_introducer_lastname,
+                first_introducer_phone=first_introducer_phone,
+                first_introducer_address=first_introducer_address,
+                second_introducer_name=second_introducer_name,
+                second_introducer_lastname=second_introducer_lastname,
+                second_introducer_phone=second_introducer_phone,
+                second_introducer_address=second_introducer_address,
+                first_account_number=first_account_number,
+                first_bank_name=first_bank_name,
+                first_shaba_number=first_shaba_number,
+                second_account_number=second_account_number,
+                second_bank_name=second_bank_name,
+                second_shaba_number=second_shaba_number,
+                paziresh=paziresh,
+                businesslicense=businesslicense,
+                leaseterm=leaseterm,
+                ownership_document=ownership_document,
+                birthcertificate=birthcertificate,
+                front_nationalcard=front_nationalcard,
+                back_nationalcard=back_nationalcard,
+                signatureseal=signatureseal,
+                sabin_form_first=sabin_form_first,
+                sabin_form_second=sabin_form_second,
             )
         except PosRegister.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({'detail': 'درخواست باموفقیت ثبت شد'},status=status.HTTP_201_CREATED)
-
+        return Response({'detail': 'درخواست باموفقیت ثبت شد'}, status=status.HTTP_201_CREATED)
 
 
 class PosRegisterListView(APIView):
     permission_classes = [IsAuthenticated]
+    queryset = PosRegister.objects.all()
 
     # renderer_classes = [TemplateHTMLRenderer]
     # template_name = 'profile_detail.html'
     def get(self, request):
-        posregisters = PosRegister.objects.filter(user=request.user)
+        # search = request.query_params.get('search')
+        search = request.data.get('search')
+
+        if search:
+            posregisters = PosRegister.objects.filter(
+                Q(first_name__icontains=search) | Q(last_name__icontains=search) | Q(national_code__icontains=search)
+                | Q(status__icontains=search) | Q(mobile__icontains=search) | Q(city__icontains=search) |
+                Q(state__icontains=search)
+                | Q(id__icontains=search),
+                user=request.user,
+            )
+        else:
+            posregisters = PosRegister.objects.filter(user=request.user)
         serializer = PosRegisterSerializer(posregisters, many=True, context={'request': request})
         return Response(serializer.data)
 
+
 class PosRegisterDetailView(APIView):
     permission_classes = [IsAuthenticated]
+
     # renderer_classes = [TemplateHTMLRenderer]
     # template_name = 'profile_detail.html'
 
     def get(self, request, pk):
         try:
-            posregister = PosRegister.objects.get(pk=pk,user=request.user)
+            posregister = PosRegister.objects.get(pk=pk, user=request.user)
         except PosRegister.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -150,8 +165,7 @@ class PosRegisterDetailView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors)
         serializer.save()
-        return  Response(serializer.data)
-
+        return Response(serializer.data)
 
 # Parent
 # class ParentListView(APIView):

@@ -1,0 +1,475 @@
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+:root {
+    scroll-behavior: smooth;
+}
+
+a {
+    color: var(--color-links);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-links-hover);
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "B Homa";
+}
+
+@media (min-width: 1400px) {
+    .container, .container-lg,
+    .container-md, .container-sm,
+    .container-xl, .container-xxl {
+        max-width: 1751px;;
+    }
+}
+
+/*--------------------------------------------------------------
+# Preloader
+--------------------------------------------------------------*/
+#preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    overflow: hidden;
+    background: rgb(var(--color-links), 0.57);
+    transition: all 0.6s ease-out;
+    width: 100%;
+    height: 100vh;
+}
+
+#preloader:before,
+#preloader:after {
+    content: "";
+    position: absolute;
+    border: 4px solid #FFFFFFFF;
+    border-radius: 50%;
+    -webkit-animation: animate-preloader 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    animation: animate-preloader 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+#preloader:after {
+    -webkit-animation-delay: -0.5s;
+    animation-delay: -0.5s;
+}
+
+@-webkit-keyframes animate-preloader {
+    0% {
+        width: 10px;
+        height: 10px;
+        top: calc(50% - 5px);
+        left: calc(50% - 5px);
+        opacity: 1;
+    }
+
+    100% {
+        width: 72px;
+        height: 72px;
+        top: calc(50% - 36px);
+        left: calc(50% - 36px);
+        opacity: 0;
+    }
+}
+
+@keyframes animate-preloader {
+    0% {
+        width: 10px;
+        height: 10px;
+        top: calc(50% - 5px);
+        left: calc(50% - 5px);
+        opacity: 1;
+    }
+
+    100% {
+        width: 72px;
+        height: 72px;
+        top: calc(50% - 36px);
+        left: calc(50% - 36px);
+        opacity: 0;
+    }
+}
+
+/*--------------------------------------------------------------
+# Sections & Section Header
+--------------------------------------------------------------*/
+section {
+    padding: 60px 0;
+    overflow: hidden;
+}
+
+.section-header {
+    text-align: center;
+    padding-bottom: 40px;
+}
+
+.section-header h2 {
+    font-size: 48px;
+    font-weight: 300;
+    margin-bottom: 20px;
+    color: var(--color-secondary);
+}
+
+.section-header p {
+    margin: 0 auto;
+    color: var(--color-secondary);
+}
+
+@media (min-width: 1280px) {
+    .section-header p {
+        max-width: 80%;
+    }
+}
+
+/*--------------------------------------------------------------
+# Breadcrumbs
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+# Scroll top button
+--------------------------------------------------------------*/
+.scroll-top {
+    position: fixed;
+    visibility: hidden;
+    opacity: 0;
+    right: 15px;
+    bottom: 15px;
+    z-index: 995;
+    background: var(--color-primary);
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    transition: all 0.4s;
+}
+
+.scroll-top i {
+    font-size: 24px;
+    color: var(--color-white);
+    line-height: 0;
+}
+
+.scroll-top:hover {
+    background: rgba(var(--color-primary-rgb), 0.85);
+    color: var(--color-white);
+}
+
+.scroll-top.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+/*--------------------------------------------------------------
+# Disable aos animation delay on mobile devices
+--------------------------------------------------------------*/
+@media screen and (max-width: 768px) {
+    [data-aos-delay] {
+        transition-delay: 0s !important;
+    }
+}
+
+/*--------------------------------------------------------------
+# Log page Section
+--------------------------------------------------------------*/
+.log {
+    background: rgba(var(--color-primary-rgb), 0.5);
+}
+
+.log .info {
+    padding: 40px;
+    box-shadow: 0px 2px 15px rgba(var(--color-black-rgb), 0.3);
+    background: white;
+    overflow: hidden;
+
+}
+
+.log .info h2 {
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.log .info p {
+    color: var(--color-secondary-light);
+    margin-bottom: 30px;
+    font-size: 20px;
+}
+
+.log .log-form {
+    width: 100%;
+    background: var(--color-white);
+    text-align: center;
+}
+
+.log .log-form .form-group {
+    padding-bottom: 8px;
+    font-size: 14px;
+}
+
+.log .log-form input[type=text],
+.log .log-form input[type=password] {
+    border-color: var(--color-primary);
+    border-radius: 0px;
+    box-shadow: none;
+    font-size: 14px;
+}
+
+.log .log-form input[type=text],
+.log .log-form input[type=password] {
+    height: 48px;
+    padding: 10px 15px;
+}
+
+.log .log-form .switch {
+    text-align: left;
+    position: relative;
+    display: inline-block;
+    width: 53px;
+    height: 24px;
+}
+
+.log .log-form label {
+    vertical-align: top;
+    padding-top: 5px;
+}
+
+/* Hide default HTML checkbox */
+.log .log-form .switch input {
+    display: none;
+}
+
+.log .log-form .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #F0F0F0;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 30px;
+}
+
+.log .log-form .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.log .log-form input:checked + .slider {
+    background-color: var(--color-primary-light);
+}
+
+.log .log-form input:focus + .slider {
+    box-shadow: 0 0 1px var(--color-primary-light);
+}
+
+.log .log-form input:checked + .slider:before {
+    -webkit-transform: translateX(30px);
+    -ms-transform: translateX(30px);
+    transform: translateX(30px);
+}
+
+.log .log-form button[type=submit] {
+    background: var(--color-primary);
+    border: 0;
+    padding: 13px 70px;
+    color: var(--color-white);
+    transition: 0.4s;
+    border-radius: 0;
+}
+
+.log .log-form button[type=submit]:hover {
+    background: rgba(var(--color-primary-dark-rgb), 0.85);
+}
+
+.log .log-form .form-link {
+    text-decoration-line: underline;
+}
+
+@media (min-width: 900px) {
+    .log .container {
+        width: 440px;
+    }
+}
+
+@-webkit-keyframes animate-loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes animate-loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*--------------------------------------------------------------
+# Pos Request form page Section
+--------------------------------------------------------------*/
+.pos {
+    background: rgba(var(--color-secondary-rgb), 0.5);
+    color: var(--color-secondary-dark);
+}
+
+.pos .info {
+    padding: 40px;
+    box-shadow: 0px 2px 15px rgba(var(--color-black-rgb), 0.3);
+    background: white;
+    overflow: hidden;
+}
+.pos .info h2 {
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.pos .info p {
+    color: var(--color-primary);
+    margin-bottom: 30px;
+    font-size: 20px;
+}
+
+.pos .pos-form {
+    width: 100%;
+    background: var(--color-white);
+}
+
+.pos .pos-form .form-group {
+    padding-bottom: 8px;
+    font-size: 15px;
+}
+.pos .pos-form .form-group label{
+    color: var(--color-secondary-dark);
+}
+.pos .pos-form input[type=text],
+.pos .pos-form input[type=password],
+.pos .pos-form input[type=date], .pos .pos-form input[type=number],
+.pos .pos-form input[type=file],
+.pos .pos-form select{
+    border-color: var(--color-primary-light);
+    color: var(--color-secondary-dark);
+    border-radius: 0px;
+    box-shadow: none;
+    font-size: 15px;
+}
+.pos .pos-form input[type=file]{
+    display: none;
+}
+.pos .pos-form .btn {
+    background-color: var(--color-primary) ;
+    color: white;
+    border-radius: 0px 10px 0px 10px;
+}
+.pos .pos-form  .file-name{
+    border: none;
+}
+.pos  .pos-form button[type=submit] {
+    background: var(--color-primary);
+    border: 0;
+    padding: 13px 70px;
+    color: var(--color-white);
+    transition: 0.4s;
+    border-radius: 0;
+}
+.pos  .pos-form button[type=submit]:hover {
+    background: rgba(var(--color-primary-dark-rgb), 0.85);
+}
+/*--------------------------------------------------------------
+# Pos Request Show page Section
+--------------------------------------------------------------*/
+.pos-show {
+    background: rgba(var(--color-secondary-rgb), 0.8);
+}
+.pos-show .pos-search{
+    text-align: center;
+    background-color: var(--color-secondary-dark);
+    border-radius: 28px;
+    padding: 5px;
+    max-width: 400px;
+}
+.pos-show .pos-search input[type=text],
+.pos-show .pos-search .search-btn {
+    background-color: rgba(var(--color-secondary-light), 0) ;
+    border: none;
+    overflow: hidden;
+    display: inline;
+}
+.pos-show .pos-search .search-btn {
+    font-size: large;
+    color: white;
+}
+.pos-show .pos-search .search-btn:hover{
+    color: var(--color-primary-light);
+}
+.pos-show .pos-search .form-control{
+    display: inline;
+}
+
+.pos-show .pos-search input[type=text]:focus ,
+.pos-show .pos-search input[type=text]:hover {
+    background-color: white;
+    border-radius: 28px;
+    border: none;
+    box-shadow: none;
+}
+
+
+.pos-show .pos-card{
+    padding: 40px;
+    box-shadow: 0px 3px 10px rgba(var(--color-black-rgb), 0.3);
+    background: white;
+    border-radius: 27px;
+    overflow: hidden;
+}
+
+.pos-show .pos-card label{
+   font-weight: bold;
+}
+.pos-show .pos-card .card-text{
+    color: var(--color-gray);
+}
+.pos-show .pos-card .staus{
+    color: #71b2f5;
+}
+.pos-show .pos-card .pos-btn-group{
+    text-align: left;
+}
+.pos-show .pos-card  .card-btn-edit{
+    border-radius: 10px 0px 10px 0px;
+    box-shadow: 2px 4px 4px rgba(var(--color-black-rgb), 0.3);
+}
+.pos-show .pos-card  .card-btn-delete{
+    border-radius: 0px 10px 0px 10px;
+    box-shadow: 2px 4px 4px rgba(var(--color-black-rgb), 0.3);
+}
+.pos-show .card-btn-create{
+    background-color: var(--color-primary) ;
+    margin-right: 6rem;
+    color: white;
+    border-color: white;
+    border-width: revert;
+    box-shadow: 0px 2px 4px rgba(var(--color-black-rgb), 0.3);
+}

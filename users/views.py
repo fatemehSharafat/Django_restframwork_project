@@ -1,16 +1,26 @@
 import uuid
 import random
+from http.client import HTTPResponse
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import SuccessURLAllowedHostsMixin
 from django.core.cache import cache
+from django.shortcuts import render
 
-from rest_framework.views import APIView
+from rest_framework.renderers import TemplateHTMLRenderer , JSONRenderer,StaticHTMLRenderer
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import status
 
 from .models import User, Device
 
 
-class LoginView(APIView):
+class LoginView(SuccessURLAllowedHostsMixin,APIView):
+    render_classes = [TemplateHTMLRenderer,StaticHTMLRenderer,JSONRenderer]
+    template_name = 'khadamatikTeta_backend/login.html'
+
+    def get(self, request):
+        return  Response({'template_name': 'khadamatikTeta_backend/login.html'})
 
     def post(self, request):
         phone_number = request.data.get('phone_number')
@@ -29,6 +39,7 @@ class LoginView(APIView):
             return Response({'detail': 'چنین کاربری تعریف نشده!'},status=status.HTTP_404_NOT_FOUND)
 
 
+
         device = Device.objects.create(user=user)
 
         code = random.randint(10000, 99999)
@@ -37,7 +48,7 @@ class LoginView(APIView):
         # cache
         cache.set(str(phone_number), code, 2 * 60)
 
-        return Response({'code': code })
+        return Response(self.template_name,{'code': code})
 
 
 class GetTokenView(APIView):
