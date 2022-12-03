@@ -19,8 +19,8 @@ class LoginView(SuccessURLAllowedHostsMixin,APIView):
     render_classes = [TemplateHTMLRenderer,StaticHTMLRenderer,JSONRenderer]
     template_name = 'khadamatikTeta_backend/login.html'
 
-    def get(self, request):
-        return  Response({'template_name': 'khadamatikTeta_backend/login.html'})
+    # def get(self, request):
+    #     return  Response({'template_name': 'khadamatikTeta_backend/login.html'})
 
     def post(self, request):
         phone_number = request.data.get('phone_number')
