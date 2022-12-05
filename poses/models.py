@@ -19,7 +19,7 @@ class PosRegister(models.Model):
         """
         return "posRegister_documents/request_%s/%s" % (str(self.id), str(request))
 
-        # Defining different types
+    # Defining different types
 
     """
         FILE_AUDIO = 1
@@ -139,7 +139,7 @@ class PosRegister(models.Model):
                                  default='Dialup')  # Dialup, GPRS, Combo, WIFI
 
     '''account-bank-info Section '''
-    first_bank_name = models.CharField(_('نام بانک اول'), max_length=50, choices=BANK_NAME_TYPES, default='ایران زمین')
+    first_bank_name = models.CharField(_('نام بانک '), max_length=50, choices=BANK_NAME_TYPES, default='ایران زمین')
     branch_bank_name= models.CharField(_('نام شعبه'), max_length=25)
     branch_bank_number = models.IntegerField(_('کد شعبه '))
     account_number = models.CharField(_('شماره حساب '), max_length=13,validators=[validate_bank_account_number])
@@ -147,7 +147,7 @@ class PosRegister(models.Model):
     paziresh = models.BooleanField(_('پذیرش صحت اطلاعات'), default=False)
 
     '''psp Section'''
-    psp = models.CharField(_('نام بانک اول'), max_length=50, choices=PSP_TYPES, default='پرداخت نوين آرين')
+    psp = models.CharField(_('psp'), max_length=50, choices=PSP_TYPES, default='پرداخت نوين آرين')
 
     '''upload-documents Section'''
     permission_document = models.FileField(_('جواز كسب/ اجاره نامه / سند مالكيت / استشهاد نامه '), upload_to=get_media_file_name)
@@ -156,7 +156,9 @@ class PosRegister(models.Model):
     signatureseal = models.FileField(_('تصویر مهر و امضا'), upload_to=get_media_file_name)
     acceptance_form = models.FileField(_('تصویر دو صفحه فرم پذيرندگي'), upload_to=get_media_file_name)
 
-    ''''''
+    '''description Section'''
+    description = models.TextField(_('description'), blank=True,null=True)
+
 
     # Fields outside the form
     cerated_time = models.DateTimeField(_('زمان ثبت درخواست'), auto_now_add=True)
@@ -181,19 +183,26 @@ class Cheque(models.Model):
                 return "posRegister_documents/user_%s/request_%s/%s" % (str(self.user.national_code), str(self.id), str(request))
             #//  posRegister_documents/user_national_code/request_id/file_nam
         """
-        return "posRegister_documents/request_%s/%s" % (str(PosRegister.id), str(request))
+        return "posRegister_documents/request_%s/%s" % (str(self.id), str(request))
 
-    posreg = models.OneToOneField(PosRegister, on_delete=models.CASCADE)
+    posregister = models.OneToOneField(PosRegister,related_name='%(class)s', on_delete=models.CASCADE)
     protected_cheque = models.CharField(_('شماره چک صیادی / سفته'), max_length=20)
     date_cheque = models.DateField(_('تاریخ سرسید'))
     bankName_cheque = models.CharField(_('نام یانک'), max_length=25)
-    amount_number_cheque =models.CharField(_(' مبلغ چك / سفته به رقم'),max_length=50,validators=[validate_amount_number_cheque])
+    amount_number_cheque = models.CharField(_(' مبلغ چك / سفته به رقم'),max_length=50,validators=[validate_amount_number_cheque])
     amount_letter_cheque = models.CharField(_('مبلغ چك / سفته به حروف'), max_length=100)
     account_owner_cheque= models.CharField(_('نام صاحب حساب'), max_length=50)
     iban_cheque= models.CharField(_('شماره شبا'), max_length=36, validators=[validate_iban_number])
-    front_nationalcard = models.FileField(_('تصویر رو کارت ملی'),upload_to=get_media_file_name)
+    cheque_document = models.FileField(_('تصویر رو کارت ملی'),upload_to=get_media_file_name,max_length=59999)
 
     class Meta:
         db_table = 'Cheque'
         verbose_name = _('اطلاعات چک')
         verbose_name_plural = _('اطلاعات چک ها ')
+
+    def __str__(self):
+        return self.protected_cheque
+
+    @property
+    def get_posregister_id(self):
+        return self.posregister

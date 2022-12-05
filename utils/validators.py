@@ -56,7 +56,7 @@ class BankAccountNumberValidator(RegexValidator):
     message = _('یک شماره حساب معتبر وارد کنید.')
 
 class AmountChequeValidator(RegexValidator):
-    regex = '^[0-9]$'
+    regex = '^[0-9]'
     message = _('مبلغ را وارد کنید.')
 validate_phone_number = PhonNumberValidator()
 validate_sku = SKUValidator()

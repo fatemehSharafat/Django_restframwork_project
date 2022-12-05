@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import PosRegister
+from .models import PosRegister, Cheque
 
 # class LoginSerializer(serializers.Serializer):
 #     email = serializers.CharField(
@@ -13,17 +13,19 @@ from .models import PosRegister
 #     )
 #     remember_me = serializers.BooleanField()
 
+
+class ChequeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cheque
+        fields = ('posregister','protected_cheque', 'date_cheque', 'bankName_cheque', 'amount_number_cheque', 'amount_letter_cheque',
+              'account_owner_cheque', 'iban_cheque', 'cheque_document')
+
+
 class PosRegisterSerializer(serializers.ModelSerializer):
+    cheque = ChequeSerializer(many=False)
     class Meta:
         model = PosRegister
-        fields = ('id', 'first_name', 'last_name', 'father_name', 'birth', 'national_code', 'national_card_series',
-                  'birthcertificate_number', 'birthcertificate_serial', 'birthcertificate_series', 'issued', 'state',
-                  'city', 'store_address', 'zipcode_pos', 'store_phone', 'business_license_number', 'tax_code', 'senf',
-                  'mobile', 'substrate', 'ownership', 'leaseterm_from', 'leaseterm_to', 'first_introducer_name','first_introducer_lastname','first_introducer_phone','first_introducer_address','second_introducer_name','second_introducer_lastname','second_introducer_phone', 'second_introducer_address', 'first_account_number',
-                  'first_bank_name', 'first_shaba_number', 'second_account_number', 'second_bank_name',
-                  'second_shaba_number', 'paziresh', 'businesslicense', 'leaseterm', 'ownership_document',
-                  'birthcertificate', 'front_nationalcard', 'back_nationalcard', 'signatureseal', 'sabin_form_first',
-                  'sabin_form_second', 'cerated_time', 'status')
+        fields ='__all__'
 
 # class ParentSerializer(serializers.ModelSerializer):
 #     posregisters = PosRegisterSerializer(many=True)

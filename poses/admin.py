@@ -3,16 +3,22 @@ from django.contrib.auth import get_user_model
 
 from import_export.admin import ImportExportModelAdmin
 from jalali_date import datetime2jalali, date2jalali
-from jalali_date.admin import ModelAdminJalaliMixin
+from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin
 
-from .models import PosRegister
+from .models import PosRegister, Cheque
+
+User = get_user_model()
 
 
+class ChequeInlineAdmin(StackedInlineJalaliMixin, admin.StackedInline):
+    model = Cheque
+    fields = ['protected_cheque', 'date_cheque', 'bankName_cheque', 'amount_number_cheque', 'amount_letter_cheque',
+              'account_owner_cheque', 'iban_cheque', 'cheque_document']
+    extra = 0
 
-User= get_user_model()
 
 @admin.register(PosRegister)
-class PosRegisterAdmin(ImportExportModelAdmin,ModelAdminJalaliMixin, admin.ModelAdmin):
+class PosRegisterAdmin(ImportExportModelAdmin, ModelAdminJalaliMixin, admin.ModelAdmin):
     # fieldsets = (
     #     (None, {'fields': ('user',)}),
     #     (_('اطلاعات شخص متقاضی'), {'fields': ('first_name', 'last_name', 'father_name', 'birth','mobile','national_code','national_card_series','birthcertificate_number','birthcertificate_serial','birthcertificate_series','issued','state', 'city')}),
@@ -29,9 +35,10 @@ class PosRegisterAdmin(ImportExportModelAdmin,ModelAdminJalaliMixin, admin.Model
     # #         'fields': ('national_code', 'phone_number', 'password1', 'password2'),
     # #     }),
     # # )
-    list_display = ['id', 'first_name', 'last_name', 'national_code','get_birth_jalali','get_updated_time_jalali']
+    list_display = ['id', 'first_name', 'last_name', 'national_code', 'get_birth_jalali', 'get_updated_time_jalali',]
     list_filter = ['id', 'first_name', 'last_name', 'national_code']
     search_fields = ['id', 'first_name', 'last_name', 'national_code']
+    inlines = [ChequeInlineAdmin]
 
     def get_updated_time_jalali(self, obj):
         return datetime2jalali(obj.updated_time).strftime('%y/%m/%d _ %H:%M:%S')
@@ -44,7 +51,6 @@ class PosRegisterAdmin(ImportExportModelAdmin,ModelAdminJalaliMixin, admin.Model
 
     get_birth_jalali.short_description = 'تاریخ تولد'
     get_birth_jalali.admin_order_field = 'birth'
-
 
 # class PosRegisterInlineAdmin(admin.StackedInline):
 #     model = PosRegister
