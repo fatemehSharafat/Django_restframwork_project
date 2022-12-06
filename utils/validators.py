@@ -55,7 +55,9 @@ class BankAccountNumberValidator(RegexValidator):
     # message = _('Enter a valid bank account number.')
     message = _('یک شماره حساب معتبر وارد کنید.')
 
-
+class AmountChequeValidator(RegexValidator):
+    regex = '^[0-9]'
+    message = _('مبلغ را وارد کنید.')
 validate_phone_number = PhonNumberValidator()
 validate_sku = SKUValidator()
 validate_username = UsernameValidator()
@@ -64,3 +66,4 @@ validate_id_number = IDNumberValidator()
 validate_iban_number = IBanNumberValidator()
 validate_bank_card_number = BankCardNumberValidator()
 validate_bank_account_number = BankAccountNumberValidator()
+validate_amount_number_cheque= AmountChequeValidator()
